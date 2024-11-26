@@ -42,8 +42,8 @@
         <label for="name">您的姓名</label>
         <input type="text" id="name" name="name" required placeholder="请输入您的姓名">
         
-        <label for="name">您的职务</label>
-        <input type="text" id="name" name="name" required placeholder="请输入您的职务">
+        <label for="job">您的职务</label>
+        <input type="text" id="job" name="job" required placeholder="请输入您的职务">
         
         <label for="unit">您的单位名称</label>
         <input type="text" id="unit" name="unit" required placeholder="请输入单位名称" autocomplete="off">
@@ -260,15 +260,30 @@ document.getElementById('form').addEventListener('submit', function (event) {
     event.preventDefault();  // 防止页面刷新
 
     const name = document.getElementById('name').value;
-    const unit = unitInput.value;
+    const job = document.getElementById('job').value;
+    const unit = document.getElementById('unit').value;
 
-    if (name && unit) {
-        // 这里可以将数据发送到后端，也可以简单地在控制台显示
-        alert('提交成功：姓名：' + name + ' 单位：' + unit);
+    if (name && job && unit) {
+        // 使用 fetch 向后端提交数据
+        fetch('http://localhost:3000/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, unit })  // 将表单数据转为 JSON 格式
+        })
+        .then(response => response.json())  // 处理响应数据
+        .then(data => {
+            alert('提交成功！');
+        })
+        .catch(error => {
+            alert('提交失败，请稍后再试');
+            console.error('提交错误:', error);
+        });
     } else {
         alert('请填写完整信息');
     }
-});
+});      
 </script>
 
 </body>
